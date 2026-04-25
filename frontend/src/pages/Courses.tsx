@@ -21,13 +21,15 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
   const [filterLevel, setFilterLevel] = useState('all');
   const [loading, setLoading] = useState(true);
 
-  // ✅ FIXED FETCH (more safe)
+  // ✅ FETCH DATA
   const fetchCourses = async () => {
     try {
-      const res = await fetch("https://elearning-project-zhr9.onrender.com/api/courses");
+      const res = await fetch(
+        "https://elearning-project-zhr9.onrender.com/api/courses"
+      );
+
       const data = await res.json();
 
-      // 🔥 IMPORTANT: ensure it's array
       if (Array.isArray(data)) {
         setCourses(data);
       } else {
@@ -35,7 +37,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
         setCourses([]);
       }
     } catch (error) {
-      console.error('Error fetching courses:', error);
+      console.error("Error fetching courses:", error);
       setCourses([]);
     } finally {
       setLoading(false);
@@ -46,14 +48,20 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
     fetchCourses();
   }, []);
 
-  // ✅ FILTER FIX (case-safe)
-  filteredCourses.map((course) => (
-  <div style={{ color: "white", padding: "10px" }}>
-    {course.title}
-  </div>
-))
+  // ✅ FILTER LOGIC (FIXED)
+  const filteredCourses = courses.filter((course) => {
+    const matchesSearch = course.title
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase());
 
-  // ✅ CLEAR FILTER BUTTON FUNCTION
+    const matchesLevel =
+      filterLevel === 'all' ||
+      course.level?.toLowerCase() === filterLevel.toLowerCase();
+
+    return matchesSearch && matchesLevel;
+  });
+
+  // ✅ CLEAR FILTERS
   const clearFilters = () => {
     setSearchTerm('');
     setFilterLevel('all');
@@ -76,29 +84,30 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-2">All Courses</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">
+            All Courses
+          </h1>
           <p className="text-white/80 text-lg">
             Find the perfect course for your learning journey
           </p>
         </div>
 
+        {/* Search + Filter */}
         <div className="flex items-center space-x-4 flex-wrap gap-2">
 
-          {/* Search */}
           <div className="relative flex-1 min-w-[250px]">
             <MagnifyingGlassIcon className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="Search courses..."
-              className="pl-12 pr-4 py-3 w-full bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-4 focus:ring-white/50 transition-all"
+              className="pl-12 pr-4 py-3 w-full bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
-          {/* Filter */}
           <select
-            className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-4 focus:ring-white/50 min-w-[150px]"
+            className="bg-white/20 border border-white/30 text-white px-4 py-3 rounded-xl"
             value={filterLevel}
             onChange={(e) => setFilterLevel(e.target.value)}
           >
@@ -112,59 +121,62 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         <div className="course-card p-6 text-center">
-          <div className="text-3xl font-bold text-white mb-2">
+          <div className="text-3xl font-bold text-white">
             {courses.length}
           </div>
-          <div className="text-white/80 text-sm uppercase tracking-wide">
+          <div className="text-white/80 text-sm">
             Total Courses
           </div>
         </div>
 
         <div className="course-card p-6 text-center">
-          <div className="text-3xl font-bold text-white mb-2">
+          <div className="text-3xl font-bold text-white">
             {filteredCourses.length}
           </div>
-          <div className="text-white/80 text-sm uppercase tracking-wide">
+          <div className="text-white/80 text-sm">
             Filtered Results
           </div>
         </div>
 
         <div className="course-card p-6 text-center">
-          <div className="text-3xl font-bold text-white mb-2">
+          <div className="text-3xl font-bold text-white">
             {userType}
           </div>
-          <div className="text-white/80 text-sm uppercase tracking-wide">
+          <div className="text-white/80 text-sm">
             Your Mode
           </div>
         </div>
 
       </div>
 
-      {/* Courses Grid */}
+      {/* Courses */}
       {filteredCourses.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {filteredCourses.map((course: Course) => (
-            <CourseCard key={course.id} course={course} userType={userType} />
+          {filteredCourses.map((course) => (
+            <CourseCard
+              key={course.id}
+              course={course}
+              userType={userType}
+            />
           ))}
         </div>
       ) : (
         <div className="text-center py-24">
-          <div className="course-card inline-block p-12 mx-auto">
+          <div className="course-card inline-block p-12">
             <div className="text-6xl mb-6">🔍</div>
             <h3 className="text-2xl font-bold text-white mb-4">
               No courses found
             </h3>
             <p className="text-white/80 mb-8">
-              Try adjusting your search or filter settings
+              Try adjusting search or filters
             </p>
 
-            {/* ✅ FIXED BUTTON */}
             <button
               onClick={clearFilters}
-              className="btn-primary px-8 py-3 text-lg"
+              className="btn-primary px-8 py-3"
             >
               Clear Filters
             </button>
