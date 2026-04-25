@@ -6,8 +6,8 @@ import logging
 from datetime import datetime
 from werkzeug.utils import secure_filename
 
-# 🤖 OpenAI
-#from openai import OpenAI
+# 🤖 OpenAI (kept commented as in your code)
+# from openai import OpenAI
 
 # Your existing modules
 from backend.models.speech_handler import SpeechHandler
@@ -21,9 +21,12 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 CORS(app)
 
+# ✅ FIX: Prevent chatbot crash
+client = None
 
 
-# Folders
+# ------------------ FOLDERS ------------------
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FOLDER = os.path.join(BASE_DIR, "data")
 
@@ -44,9 +47,14 @@ if not os.path.exists(USERS_FILE):
     with open(USERS_FILE, "w") as f:
         json.dump([], f)
 
-# Init services
+
+# ------------------ INIT SERVICES ------------------
+
 speech_handler = SpeechHandler()
-subtitle_gen = SubtitleGenerator(model_size="base")
+
+# ✅ FIX: removed model_size argument
+subtitle_gen = SubtitleGenerator()
+
 
 # ------------------ HELPERS ------------------
 
@@ -63,6 +71,7 @@ def write_json(file, data):
     with open(file, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2)
 
+
 # ------------------ ROUTES ------------------
 
 @app.route('/')
@@ -72,12 +81,14 @@ def home():
         "status": "active"
     })
 
+
 # ------------------ USERS ------------------
 
 @app.route('/api/users', methods=['GET'])
 def get_users():
     users = read_json(USERS_FILE)
     return jsonify(users)
+
 
 @app.route('/api/users', methods=['POST'])
 def add_user():
@@ -106,7 +117,8 @@ def add_user():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# 🔥 NEW: LIVE USER COUNT API
+
+# 🔥 USER COUNT
 @app.route('/api/users/count', methods=['GET'])
 def get_user_count():
     users = read_json(USERS_FILE)
@@ -114,22 +126,17 @@ def get_user_count():
         "total_users": len(users)
     })
 
+
 # ------------------ COURSES ------------------
 
 @app.route('/api/courses', methods=['GET'])
 def get_courses():
     try:
-        print("📁 Reading:", COURSES_FILE)
-
         courses = read_json(COURSES_FILE)
-
-        print("✅ Loaded courses:", len(courses))
-
         return jsonify(courses)
-
     except Exception as e:
-        print("❌ ERROR:", str(e))
         return jsonify([])
+
 
 # ------------------ ANALYTICS ------------------
 
@@ -145,6 +152,7 @@ def analytics():
         "total_users": len(users)
     })
 
+
 # ------------------ SPEECH ------------------
 
 @app.route('/api/speech-to-text', methods=['POST'])
@@ -157,6 +165,7 @@ def speech_to_text():
         return jsonify({"text": text})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/api/text-to-speech', methods=['POST'])
 def text_to_speech():
@@ -172,6 +181,7 @@ def text_to_speech():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 # ------------------ SUBTITLES ------------------
 
@@ -197,6 +207,7 @@ def generate_subtitles():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 # ------------------ CHATBOT ------------------
 
 @app.route('/api/chat', methods=['POST'])
@@ -208,33 +219,31 @@ def chat():
         if not user_message:
             return jsonify({"error": "Message required"}), 400
 
+        # ✅ FIX: prevent crash if client not configured
+        if client is None:
+            return jsonify({"reply": "Chatbot is temporarily disabled"})
+
         response = client.chat.completions.create(
             model="gpt-4.1-mini",
             messages=[
-                {
-                    "role": "system",
-                    "content": "You are a simple AI tutor. Explain clearly."
-                },
-                {
-                    "role": "user",
-                    "content": user_message
-                }
+                {"role": "system", "content": "You are a simple AI tutor."},
+                {"role": "user", "content": user_message}
             ]
         )
 
         reply = response.choices[0].message.content
-
         return jsonify({"reply": reply})
 
     except Exception as e:
-        print("❌ Chat error:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 # ------------------ HEALTH ------------------
 
 @app.route('/api/health')
 def health():
     return jsonify({"status": "ok"})
+
 
 # ------------------ RUN ------------------
 
