@@ -10,9 +10,9 @@ from werkzeug.utils import secure_filename
 #from openai import OpenAI
 
 # Your existing modules
-from models.speech_handler import SpeechHandler
-from models.subtitle_generator import SubtitleGenerator
-from models.accessibility_service import accessibility_service
+from backend.models.speech_handler import SpeechHandler
+from backend.models.subtitle_generator import SubtitleGenerator
+from backend.models.accessibility_service import accessibility_service
 
 # Logging
 logging.basicConfig(level=logging.INFO)
