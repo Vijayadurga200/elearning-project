@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Admin from './pages/Admin';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
-import Profile from './pages/Profile';
+import Profile from './pages/profile';
 import AccessibilitySettings from './pages/AccessibilitySettings';
 import SignLanguage from './pages/SignLanguage';
 
