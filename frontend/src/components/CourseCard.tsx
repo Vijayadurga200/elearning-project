@@ -26,7 +26,6 @@ interface Props {
 const CourseCard: React.FC<Props> = ({ course }) => {
   const lessonCount = course.lessons?.length || 0;
 
-  // safe fallback values
   const description =
     course.description ||
     course.lessons?.[0]?.content?.slice(0, 120) + '...' ||
@@ -37,7 +36,7 @@ const CourseCard: React.FC<Props> = ({ course }) => {
     `${lessonCount} lessons`;
 
   return (
-    <div className="course-card bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/20 hover:scale-[1.02] transition-all duration-300">
+    <div className="course-card">
 
       {/* Thumbnail */}
       {course.thumbnail && (
@@ -49,28 +48,28 @@ const CourseCard: React.FC<Props> = ({ course }) => {
       )}
 
       {/* Title */}
-      <h2 className="text-xl font-bold text-white mb-2">
+      <h2 className="text-xl font-bold text-gray-900 mb-2">
         {course.title}
       </h2>
 
-      {/* Level badge */}
-      <span className="inline-block text-xs px-3 py-1 rounded-full bg-white/20 text-white mb-3">
+      {/* Level */}
+      <span className="inline-block text-xs px-3 py-1 rounded-full bg-gray-100 text-gray-700 mb-3">
         {course.level}
       </span>
 
       {/* Description */}
-      <p className="text-white/80 text-sm mb-4">
+      <p className="text-gray-600 text-sm mb-4">
         {description}
       </p>
 
-      {/* Meta info */}
-      <div className="flex justify-between text-white/70 text-sm mb-4">
+      {/* Meta */}
+      <div className="flex justify-between text-gray-500 text-sm mb-4">
         <span>📚 {lessonCount} lessons</span>
         <span>⏱ {duration}</span>
       </div>
 
-      {/* CTA Button */}
-      <button className="w-full py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium transition">
+      {/* Button */}
+      <button className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition">
         View Course
       </button>
 
