@@ -10,3 +10,4 @@ Werkzeug==2.3.7
 gunicorn==21.2.0
 setuptools>=65.0.0
 wheel
+SpeechRecognition==3.10.0
