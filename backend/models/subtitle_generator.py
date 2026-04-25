@@ -1,4 +1,4 @@
-import whisper
+#import whisper
 import os
 import json
 from pydub import AudioSegment
@@ -22,7 +22,7 @@ class SubtitleGenerator:
         """
         logger.info(f"Loading Whisper model: {model_size}")
         try:
-            self.model = whisper.load_model(model_size)
+            #self.model = whisper.load_model(model_size)
             logger.info("Whisper model loaded successfully")
         except Exception as e:
             logger.error(f"Failed to load Whisper model: {e}")
@@ -80,7 +80,7 @@ class SubtitleGenerator:
             
             # Transcribe with Whisper
             logger.info("Transcribing audio with Whisper...")
-            result = self.model.transcribe(
+            #result = self.model.transcribe(
                 temp_audio,
                 fp16=False,  # Disable for CPU
                 language='en',
