@@ -21,8 +21,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 CORS(app)
 
-# 🔐 API Key (replace with your real key)
-client = OpenAI(api_key="sk-xxxx")
+
 
 # Folders
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
