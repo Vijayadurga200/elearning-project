@@ -47,10 +47,11 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
   }, []);
 
   // ✅ FILTER FIX (case-safe)
-  const filteredCourses = courses.filter(course => 
-    course.title?.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (filterLevel === 'all' || course.level?.toLowerCase() === filterLevel.toLowerCase())
-  );
+  {filteredCourses.map((course) => (
+  <div style={{ color: "white", padding: "10px" }}>
+    {course.title}
+  </div>
+))}
 
   // ✅ CLEAR FILTER BUTTON FUNCTION
   const clearFilters = () => {
