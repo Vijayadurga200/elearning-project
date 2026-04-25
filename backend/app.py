@@ -7,7 +7,7 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 
 # 🤖 OpenAI
-from openai import OpenAI
+#from openai import OpenAI
 
 # Your existing modules
 from models.speech_handler import SpeechHandler
