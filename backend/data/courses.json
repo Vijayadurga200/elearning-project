@@ -1,0 +1,201 @@
+[
+  {
+    "id": "web-dev",
+    "title": "Modern Web Development",
+    "description": "Master HTML, CSS, JavaScript, React and modern web technologies",
+    "duration": "12 hours",
+    "level": "Beginner",
+    "thumbnail": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400",
+    "lessons": [
+      {
+        "id": "1",
+        "title": "Complete Web Development Course",
+        "duration": "2+ hours",
+        "video": "https://www.youtube.com/watch?v=HGTJBPNC-Gw",
+        "content": "Web development is the process of building websites and web applications. It includes both frontend and backend technologies working together. Frontend focuses on the user interface while backend handles logic and data processing.\n\nHTML is used to structure web pages using elements like headings, paragraphs, and containers. CSS is used to style the website by adding colors, layouts, and responsive designs. JavaScript adds interactivity such as handling user actions and updating content dynamically.\n\nModern web development also includes tools like Git for version control, GitHub for collaboration, and browser developer tools for debugging.\n\nIn real-world applications, web development is used to build portfolio websites, e-commerce platforms, and complex web applications like social media platforms.\n\nBy the end of this lesson, you will understand how websites are structured, styled, and made interactive.",
+        "quiz": [
+          {
+            "question": "What does HTML stand for?",
+            "options": ["Hyper Text Markup Language", "High Tech Language", "Machine Language", "None"],
+            "answer": 0
+          },
+          {
+            "question": "CSS is used for?",
+            "options": ["Structure", "Styling", "Logic", "Database"],
+            "answer": 1
+          },
+          {
+            "question": "JavaScript adds?",
+            "options": ["Style", "Structure", "Interactivity", "Storage"],
+            "answer": 2
+          },
+          {
+            "question": "Which is used for layout?",
+            "options": ["Grid", "Python", "SQL", "API"],
+            "answer": 0
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "data-science",
+    "title": "Data Science Fundamentals",
+    "description": "Learn Python, Pandas, Data Visualization and ML basics",
+    "duration": "15 hours",
+    "level": "Intermediate",
+    "thumbnail": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400",
+    "lessons": [
+      {
+        "id": "ds1",
+        "title": "Data Science Full Course",
+        "duration": "Full Course",
+        "video": "https://www.youtube.com/watch?v=QISvmiwOIYI",
+        "content": "Data science is the process of extracting meaningful insights from data. It combines programming, statistics, and domain knowledge.\n\nPython is one of the most popular languages in data science. It is used along with libraries like NumPy for numerical operations and Pandas for data analysis.\n\nData analysis involves cleaning data, handling missing values, and transforming data into useful formats. Visualization tools like Matplotlib and Seaborn are used to represent data in charts and graphs.\n\nMachine learning is a part of data science that focuses on building models that can learn from data. It includes techniques like classification and regression.\n\nIn real-world applications, data science is used in business analytics, recommendation systems, and predictive modeling.\n\nBy the end of this lesson, you will understand how to analyze and visualize data effectively.",
+        "quiz": [
+          {
+            "question": "Data Science is used for?",
+            "options": ["Gaming", "Analysis", "Design", "Drawing"],
+            "answer": 1
+          },
+          {
+            "question": "Popular language?",
+            "options": ["Python", "HTML", "CSS", "XML"],
+            "answer": 0
+          },
+          {
+            "question": "Pandas is used for?",
+            "options": ["Design", "Analysis", "Gaming", "AI"],
+            "answer": 1
+          },
+          {
+            "question": "Visualization means?",
+            "options": ["Charts", "Code", "Text", "None"],
+            "answer": 0
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "ui-ux",
+    "title": "UI/UX Design",
+    "description": "Learn UI/UX principles",
+    "duration": "10 hours",
+    "level": "Beginner",
+    "thumbnail": "https://images.unsplash.com/photo-1586717799252-bd134ad00e26?w=400",
+    "lessons": [
+      {
+        "id": "ux1",
+        "title": "UI/UX Design Complete Guide",
+        "duration": "Full Course",
+        "video": "https://www.youtube.com/watch?v=MBblN98-5lg",
+        "content": "UI and UX design focus on creating user-friendly digital experiences. UI design deals with visual elements such as colors, typography, and layout. UX design focuses on improving user satisfaction by enhancing usability and accessibility.\n\nDesign tools like Figma and Adobe XD are commonly used to create layouts and prototypes.\n\nGood design follows principles such as simplicity, consistency, and clarity. Designers also consider accessibility to ensure applications can be used by everyone.\n\nUI and UX design are widely used in mobile apps, websites, and software products.\n\nBy the end of this lesson, you will understand how to design clean and effective user interfaces.",
+        "quiz": [
+          {
+            "question": "UI stands for?",
+            "options": ["User Interface", "User Info", "Universal Input", "None"],
+            "answer": 0
+          },
+          {
+            "question": "UX stands for?",
+            "options": ["User Experience", "User Extra", "User Exam", "None"],
+            "answer": 0
+          },
+          {
+            "question": "Design tool?",
+            "options": ["Figma", "Python", "SQL", "C++"],
+            "answer": 0
+          },
+          {
+            "question": "Good UX means?",
+            "options": ["Easy to use", "Hard", "Complex", "Slow"],
+            "answer": 0
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "cyber-security",
+    "title": "Cyber Security",
+    "description": "Learn system security basics",
+    "duration": "14 hours",
+    "level": "Intermediate",
+    "thumbnail": "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=400",
+    "lessons": [
+      {
+        "id": "cs1",
+        "title": "Cyber Security Full Course",
+        "duration": "Full Course",
+        "video": "https://www.youtube.com/watch?v=v3iUx2SNspY",
+        "content": "Cybersecurity focuses on protecting systems, networks, and data from digital attacks. It includes identifying threats and implementing measures to prevent them.\n\nCommon threats include malware, viruses, phishing, and hacking attempts. Tools like firewalls and antivirus software are used to secure systems.\n\nCybersecurity is important in areas like banking, online transactions, and personal data protection.\n\nBy the end of this lesson, you will understand basic security practices and how to protect systems from threats.",
+        "quiz": [
+          {
+            "question": "Cybersecurity protects?",
+            "options": ["Systems", "Games", "Design", "Music"],
+            "answer": 0
+          },
+          {
+            "question": "Virus is?",
+            "options": ["Threat", "Tool", "Language", "App"],
+            "answer": 0
+          },
+          {
+            "question": "Firewall is used for?",
+            "options": ["Security", "Coding", "Design", "Storage"],
+            "answer": 0
+          },
+          {
+            "question": "Phishing is?",
+            "options": ["Attack", "Game", "Tool", "None"],
+            "answer": 0
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "ai-ml",
+    "title": "AI & Machine Learning",
+    "description": "Learn AI concepts",
+    "duration": "18 hours",
+    "level": "Advanced",
+    "thumbnail": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400",
+    "lessons": [
+      {
+        "id": "ai1",
+        "title": "AI & ML Full Course",
+        "duration": "Full Course",
+        "video": "https://www.youtube.com/watch?v=1Qm_RgejEHg",
+        "content": "Artificial Intelligence enables machines to perform tasks that normally require human intelligence. Machine Learning is a subset of AI that allows systems to learn from data.\n\nMachine learning models are trained using data and algorithms. These models can make predictions or decisions without being explicitly programmed.\n\nCommon applications include chatbots, recommendation systems, and self-driving cars.\n\nPopular tools include TensorFlow and Scikit-learn.\n\nBy the end of this lesson, you will understand the basics of AI and how machines learn from data.",
+        "quiz": [
+          {
+            "question": "AI stands for?",
+            "options": ["Artificial Intelligence", "Auto Input", "Advanced Info", "None"],
+            "answer": 0
+          },
+          {
+            "question": "ML stands for?",
+            "options": ["Machine Learning", "Main Logic", "Meta Language", "None"],
+            "answer": 0
+          },
+          {
+            "question": "AI used for?",
+            "options": ["Automation", "Cooking", "Painting", "None"],
+            "answer": 0
+          },
+          {
+            "question": "AI tool?",
+            "options": ["TensorFlow", "HTML", "CSS", "Bootstrap"],
+            "answer": 0
+          }
+        ]
+      }
+    ]
+  }
+]

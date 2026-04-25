@@ -1,0 +1,61 @@
+[
+  {
+    "id": "1",
+    "name": "sam",
+    "email": "sam@gmai.com",
+    "disability": "visual",
+    "features": [
+      "Voice Navigation"
+    ],
+    "created_at": "2026-04-17T00:32:27.423002"
+  },
+  {
+    "id": "2",
+    "name": "aravindh",
+    "email": "sam1@gmai.com",
+    "disability": "motor",
+    "features": [],
+    "created_at": "2026-04-17T00:33:04.280748"
+  },
+  {
+    "id": "3",
+    "name": "niharika",
+    "email": "niharika@gmai.com",
+    "disability": "motor",
+    "features": [
+      "Subtitles & Transcripts"
+    ],
+    "created_at": "2026-04-17T00:36:55.011566"
+  },
+  {
+    "id": "4",
+    "name": "haritha",
+    "email": "haritha@gmail.com",
+    "disability": "visual",
+    "features": [
+      "Subtitles & Transcripts",
+      "Voice Navigation"
+    ],
+    "created_at": "2026-04-17T09:33:28.416081"
+  },
+  {
+    "id": "5",
+    "name": "vijaya",
+    "email": "sam@gmai.com",
+    "disability": "visual",
+    "features": [
+      "Voice Navigation"
+    ],
+    "created_at": "2026-04-17T14:59:24.187654"
+  },
+  {
+    "id": "6",
+    "name": "mani",
+    "email": "mani@gmail.com",
+    "disability": "hearing",
+    "features": [
+      "Text-to-Speech"
+    ],
+    "created_at": "2026-04-17T21:44:06.948211"
+  }
+]
