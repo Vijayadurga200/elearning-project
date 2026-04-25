@@ -1,80 +1,79 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+
+interface Lesson {
+  id: string;
+  title?: string;
+  content: string;
+  duration: string;
+  video?: string;
+}
 
 interface Course {
   id: string;
   title: string;
-  description: string;
-  duration: string;
+  description?: string;
+  duration?: string;
   level: string;
-  thumbnail: string;
+  thumbnail?: string;
+  lessons?: Lesson[];
 }
 
-interface CourseCardProps {
+interface Props {
   course: Course;
   userType: 'visual' | 'hearing' | 'none';
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, userType }) => {
-  const navigate = useNavigate(); // ✅ navigation hook
+const CourseCard: React.FC<Props> = ({ course }) => {
+  const lessonCount = course.lessons?.length || 0;
+
+  // safe fallback values
+  const description =
+    course.description ||
+    course.lessons?.[0]?.content?.slice(0, 120) + '...' ||
+    'No description available';
+
+  const duration =
+    course.duration ||
+    `${lessonCount} lessons`;
 
   return (
-    <div
-      className="course-card group cursor-pointer"
-      role="button"
-      tabIndex={0}
-      onClick={() => navigate(`/courses/${course.id}`)} // ✅ whole card clickable
-    >
+    <div className="course-card bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/20 hover:scale-[1.02] transition-all duration-300">
+
       {/* Thumbnail */}
-      <div className="relative overflow-hidden rounded-xl mb-6 aspect-video bg-gradient-to-br from-purple-500/20 to-blue-500/20">
-        <img 
-          src={course.thumbnail} 
-          alt={`${course.title} course thumbnail`}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+      {course.thumbnail && (
+        <img
+          src={course.thumbnail}
+          alt={course.title}
+          className="w-full h-40 object-cover rounded-lg mb-4"
         />
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-gray-800 shadow-lg">
-          {course.level}
-        </div>
-        
-        {/* Accessibility badges */}
-        {userType === 'visual' && (
-          <div className="absolute bottom-4 left-4 bg-blue-500/90 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-            🎤 Voice Ready
-          </div>
-        )}
-        {userType === 'hearing' && (
-          <div className="absolute bottom-4 left-4 bg-green-500/90 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-            📝 Subtitles
-          </div>
-        )}
+      )}
+
+      {/* Title */}
+      <h2 className="text-xl font-bold text-white mb-2">
+        {course.title}
+      </h2>
+
+      {/* Level badge */}
+      <span className="inline-block text-xs px-3 py-1 rounded-full bg-white/20 text-white mb-3">
+        {course.level}
+      </span>
+
+      {/* Description */}
+      <p className="text-white/80 text-sm mb-4">
+        {description}
+      </p>
+
+      {/* Meta info */}
+      <div className="flex justify-between text-white/70 text-sm mb-4">
+        <span>📚 {lessonCount} lessons</span>
+        <span>⏱ {duration}</span>
       </div>
 
-      {/* Content */}
-      <div>
-        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-100 transition-colors">
-          {course.title}
-        </h3>
-        <p className="text-white/80 mb-4 line-clamp-2 leading-relaxed">
-          {course.description}
-        </p>
-        
-        <div className="flex items-center justify-between">
-          <span className="text-white/70 text-sm font-medium">
-            ⏱️ {course.duration}
-          </span>
+      {/* CTA Button */}
+      <button className="w-full py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium transition">
+        View Course
+      </button>
 
-          {/* ✅ FIXED BUTTON */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation(); // 🚨 prevents double click from card
-              navigate(`/courses/${course.id}`);
-            }}
-            className="btn-primary text-sm px-4 py-2"
-          >
-            Start Course
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
