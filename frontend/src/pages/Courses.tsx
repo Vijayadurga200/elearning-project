@@ -15,37 +15,43 @@ interface Course {
   thumbnail?: string;
 }
 
+const API_URL = "https://elearning-project-zhr9.onrender.com";
+
 const Courses: React.FC<CoursesProps> = ({ userType }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterLevel, setFilterLevel] = useState('all');
   const [loading, setLoading] = useState(true);
 
-  // ✅ FIXED FETCH (with retry + proper error handling)
+  // ✅ FIXED FETCH (retry + proper loading control)
   const fetchCourses = async () => {
     try {
-      const res = await fetch(
-        "https://elearning-project-zhr9.onrender.com/api/courses"
-      );
+      console.log("📡 Calling API...");
 
-      // 🔥 important: check status
-      if (!res.ok) throw new Error("Fetch failed");
+      const res = await fetch(`${API_URL}/api/courses`, {
+        method: "GET",
+        cache: "no-store"
+      });
+
+      console.log("📊 Status:", res.status);
+
+      if (!res.ok) throw new Error("Server not ready");
 
       const data = await res.json();
+      console.log("📦 DATA:", data);
 
-      if (Array.isArray(data)) {
+      if (Array.isArray(data) && data.length > 0) {
         setCourses(data);
+        setLoading(false); // ✅ ONLY when success
       } else {
-        console.error("Invalid data format:", data);
-        setCourses([]);
+        throw new Error("Empty data");
       }
-    } catch (error) {
-      console.error("Error fetching courses:", error);
 
-      // 🔥 retry after 3 seconds (fix for Render cold start)
+    } catch (error) {
+      console.error("⚠️ Retry fetching...", error);
+
+      // 🔥 retry after 3 sec (Render cold start fix)
       setTimeout(fetchCourses, 3000);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -71,12 +77,15 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
     setFilterLevel('all');
   };
 
+  // ✅ LOADING STATE (keeps retrying)
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="course-card p-12 text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white text-lg">Loading courses...</p>
+          <p className="text-white text-lg">
+            Loading courses... (server waking up ⏳)
+          </p>
         </div>
       </div>
     );
@@ -96,7 +105,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           </p>
         </div>
 
-        {/* 🔥 RESPONSIVE FIX */}
+        {/* Search + Filter */}
         <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
 
           <div className="relative w-full sm:w-[250px] lg:flex-1">
