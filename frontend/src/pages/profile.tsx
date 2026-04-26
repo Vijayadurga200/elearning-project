@@ -38,7 +38,7 @@ const Profile: React.FC<ProfileProps> = ({ updatePreferences }) => {
 
     try {
       // ✅ FIXED BACKEND API
-      const res = await fetch("fetch("https://elearning-project-zhr9.onrender.com/api/users")", {
+      const res = await fetch("https://elearning-project-zhr9.onrender.com/api/users"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
