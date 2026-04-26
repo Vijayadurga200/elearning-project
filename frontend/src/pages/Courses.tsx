@@ -21,12 +21,15 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
   const [filterLevel, setFilterLevel] = useState('all');
   const [loading, setLoading] = useState(true);
 
-  // ✅ FETCH DATA
+  // ✅ FIXED FETCH (with retry + proper error handling)
   const fetchCourses = async () => {
     try {
       const res = await fetch(
         "https://elearning-project-zhr9.onrender.com/api/courses"
       );
+
+      // 🔥 important: check status
+      if (!res.ok) throw new Error("Fetch failed");
 
       const data = await res.json();
 
@@ -38,7 +41,9 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
       }
     } catch (error) {
       console.error("Error fetching courses:", error);
-      setCourses([]);
+
+      // 🔥 retry after 3 seconds (fix for Render cold start)
+      setTimeout(fetchCourses, 3000);
     } finally {
       setLoading(false);
     }
@@ -48,7 +53,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
     fetchCourses();
   }, []);
 
-  // ✅ FILTER LOGIC (FIXED)
+  // ✅ FILTER LOGIC
   const filteredCourses = courses.filter((course) => {
     const matchesSearch = course.title
       ?.toLowerCase()
@@ -61,7 +66,6 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
     return matchesSearch && matchesLevel;
   });
 
-  // ✅ CLEAR FILTERS
   const clearFilters = () => {
     setSearchTerm('');
     setFilterLevel('all');
@@ -82,7 +86,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
     <div className="space-y-8">
 
       {/* Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
         <div>
           <h1 className="text-4xl font-bold text-white mb-2">
             All Courses
@@ -92,22 +96,22 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           </p>
         </div>
 
-        {/* Search + Filter */}
-        <div className="flex items-center space-x-4 flex-wrap gap-2">
+        {/* 🔥 RESPONSIVE FIX */}
+        <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
 
-          <div className="relative flex-1 min-w-[250px]">
+          <div className="relative w-full sm:w-[250px] lg:flex-1">
             <MagnifyingGlassIcon className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="Search courses..."
-              className="pl-12 pr-4 py-3 w-full bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white"
+              className="pl-12 pr-4 py-3 w-full bg-white/20 border border-white/30 rounded-xl text-white"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
           <select
-            className="bg-white/20 border border-white/30 text-white px-4 py-3 rounded-xl"
+            className="bg-white/20 border border-white/30 text-white px-4 py-3 rounded-xl w-full sm:w-auto"
             value={filterLevel}
             onChange={(e) => setFilterLevel(e.target.value)}
           >
@@ -121,7 +125,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
         <div className="course-card p-6 text-center">
           <div className="text-3xl font-bold text-white">
@@ -152,9 +156,9 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
 
       </div>
 
-      {/* Courses */}
+      {/* Courses Grid */}
       {filteredCourses.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredCourses.map((course) => (
             <CourseCard
               key={course.id}
