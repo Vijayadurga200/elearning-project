@@ -25,20 +25,14 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
 
   const fetchCourses = async (attempt = 1) => {
     try {
-      console.log(`📡 Fetching courses (attempt ${attempt})...`);
-
       const res = await fetch(`${API_URL}/api/courses`, {
         method: "GET",
         cache: "no-store"
       });
 
-      console.log("📊 Status:", res.status);
-
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
 
       const data = await res.json();
-      console.log("📦 Data received:", data);
-
       setCourses(Array.isArray(data) ? data : []);
       setLoading(false);
 
@@ -46,10 +40,8 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
       console.error(`Attempt ${attempt} failed:`, error);
 
       if (attempt < 4) {
-        // Retry up to 3 times to handle Render cold start delay
         setTimeout(() => fetchCourses(attempt + 1), 3000);
       } else {
-        // Give up after 3 retries — show empty state
         setCourses([]);
         setLoading(false);
       }
@@ -77,16 +69,17 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
     setFilterLevel('all');
   };
 
+  // ✅ LOADING UI (mobile friendly)
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="course-card p-12 text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-blue text-lg">
-            Loading courses... (server waking up ⏳)
+      <div className="flex items-center justify-center min-h-[50vh] px-4">
+        <div className="course-card p-6 sm:p-10 text-center w-full max-w-md">
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white text-base sm:text-lg">
+            Loading courses...
           </p>
-          <p className="text-white/60 text-sm mt-2">
-            This may take up to 10 seconds on first load
+          <p className="text-white/60 text-xs sm:text-sm mt-2">
+            Server may take a few seconds ⏳
           </p>
         </div>
       </div>
@@ -94,35 +87,36 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 px-4 sm:px-6 lg:px-10">
 
-      {/* Header */}
+      {/* HEADER */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
         <div>
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
             All Courses
           </h1>
-          <p className="text-blue/80 text-lg">
+          <p className="text-white/80 text-sm sm:text-base lg:text-lg">
             Find the perfect course for your learning journey
           </p>
         </div>
 
-        {/* Search + Filter */}
+        {/* SEARCH + FILTER */}
         <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
 
-          <div className="relative w-full sm:w-[250px] lg:flex-1">
-            <MagnifyingGlassIcon className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <div className="relative w-full sm:w-[250px] lg:w-[300px]">
+            <MagnifyingGlassIcon className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" />
             <input
               type="text"
               placeholder="Search courses..."
-              className="pl-12 pr-4 py-3 w-full bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
+              className="pl-12 pr-4 py-2.5 sm:py-3 w-full bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 text-sm sm:text-base"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
           <select
-            className="bg-blue/20 border border-white/30 text-white px-4 py-3 rounded-xl w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-white/50"
+            className="bg-white/20 border border-white/30 text-white px-4 py-2.5 sm:py-3 rounded-xl w-full sm:w-auto text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-white/50"
             value={filterLevel}
             onChange={(e) => setFilterLevel(e.target.value)}
           >
@@ -135,41 +129,41 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
         </div>
       </div>
 
-      {/* Stats */}
+      {/* STATS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-        <div className="course-card p-6 text-center">
-          <div className="text-3xl font-bold text-black">
+        <div className="course-card p-4 sm:p-6 text-center">
+          <div className="text-2xl sm:text-3xl font-bold text-white">
             {courses.length}
           </div>
-          <div className="text-black/80 text-sm uppercase tracking-wide">
+          <div className="text-white/80 text-xs sm:text-sm uppercase">
             Total Courses
           </div>
         </div>
 
-        <div className="course-card p-6 text-center">
-          <div className="text-3xl font-bold text-black">
+        <div className="course-card p-4 sm:p-6 text-center">
+          <div className="text-2xl sm:text-3xl font-bold text-white">
             {filteredCourses.length}
           </div>
-          <div className="text-black/80 text-sm uppercase tracking-wide">
+          <div className="text-white/80 text-xs sm:text-sm uppercase">
             Filtered Results
           </div>
         </div>
 
-        <div className="course-card p-6 text-center">
-          <div className="text-3xl font-bold text-black capitalize">
+        <div className="course-card p-4 sm:p-6 text-center">
+          <div className="text-2xl sm:text-3xl font-bold text-white capitalize">
             {userType}
           </div>
-          <div className="text-black/80 text-sm uppercase tracking-wide">
+          <div className="text-white/80 text-xs sm:text-sm uppercase">
             Your Mode
           </div>
         </div>
 
       </div>
 
-      {/* Courses Grid */}
+      {/* COURSES GRID */}
       {filteredCourses.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {filteredCourses.map((course) => (
             <CourseCard
               key={course.id}
@@ -179,18 +173,18 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-24">
-          <div className="course-card inline-block p-12">
-            <div className="text-6xl mb-6">🔍</div>
-            <h3 className="text-2xl font-bold text-white mb-4">
+        <div className="text-center py-16 sm:py-24">
+          <div className="course-card inline-block p-6 sm:p-12 max-w-md w-full">
+            <div className="text-4xl sm:text-6xl mb-4 sm:mb-6">🔍</div>
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
               No courses found
             </h3>
-            <p className="text-white/80 mb-8">
+            <p className="text-white/80 text-sm sm:text-base mb-6 sm:mb-8">
               Try adjusting your search or filter settings
             </p>
             <button
               onClick={clearFilters}
-              className="btn-primary px-8 py-3 text-lg"
+              className="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-lg"
             >
               Clear Filters
             </button>
