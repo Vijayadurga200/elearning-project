@@ -20,6 +20,8 @@ interface Lesson {
   }>;
 }
 
+const API_URL = "https://elearning-project-zhr9.onrender.com";
+
 const CourseDetail: React.FC<CourseDetailProps> = ({ userType }) => {
   const { id } = useParams();
 
@@ -27,25 +29,22 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ userType }) => {
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ FIXED FETCH + ID MATCH
   useEffect(() => {
-    const fetchCourse = async () => {
+    const fetchCourse = async (attempt = 1) => {
       try {
-        const res = await fetch('http://localhost:5000/api/courses');
+        const res = await fetch(`${API_URL}/api/courses`, {
+          cache: "no-store"
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
         const data = await res.json();
 
-        // 🔥 FIX: id type mismatch (string vs number)
         const foundCourse = data.find((c: any) => String(c.id) === String(id));
 
         if (foundCourse) {
-          // ✅ ensure lessons exist
           const lessons = foundCourse.lessons || [];
-
-          setCourse({
-            ...foundCourse,
-            lessons
-          });
-
+          setCourse({ ...foundCourse, lessons });
           if (lessons.length > 0) {
             setCurrentLesson(lessons[0]);
           }
@@ -53,30 +52,35 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ userType }) => {
           setCourse(null);
         }
 
-      } catch (error) {
-        console.error('Error fetching course:', error);
-        setCourse(null);
-      } finally {
         setLoading(false);
+
+      } catch (error) {
+        console.error(`Attempt ${attempt} failed:`, error);
+
+        if (attempt < 4) {
+          setTimeout(() => fetchCourse(attempt + 1), 3000);
+        } else {
+          setCourse(null);
+          setLoading(false);
+        }
       }
     };
 
     fetchCourse();
   }, [id]);
 
-  // Loading
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="course-card p-12 text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
           <p className="text-white text-lg">Loading course details...</p>
+          <p className="text-white/60 text-sm mt-2">This may take up to 10 seconds on first load</p>
         </div>
       </div>
     );
   }
 
-  // Not found
   if (!course) {
     return (
       <div className="text-center py-24">
