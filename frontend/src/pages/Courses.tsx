@@ -139,7 +139,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
         <div className="course-card p-6 text-center">
-          <div className="text-3xl font-bold text-white">
+          <div className="text-3xl font-bold text-black">
             {courses.length}
           </div>
           <div className="text-black/80 text-sm uppercase tracking-wide">
@@ -151,7 +151,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           <div className="text-3xl font-bold text-black">
             {filteredCourses.length}
           </div>
-          <div className="text-white/80 text-sm uppercase tracking-wide">
+          <div className="text-black/80 text-sm uppercase tracking-wide">
             Filtered Results
           </div>
         </div>
@@ -160,7 +160,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           <div className="text-3xl font-bold text-black capitalize">
             {userType}
           </div>
-          <div className="text-white/80 text-sm uppercase tracking-wide">
+          <div className="text-black/80 text-sm uppercase tracking-wide">
             Your Mode
           </div>
         </div>
