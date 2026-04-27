@@ -133,28 +133,28 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
         <div className="course-card p-4 sm:p-6 text-center">
-          <div className="text-2xl sm:text-3xl font-bold text-white">
+          <div className="text-2xl sm:text-3xl font-bold text-black">
             {courses.length}
           </div>
-          <div className="text-white/80 text-xs sm:text-sm uppercase">
+          <div className="text-black/80 text-xs sm:text-sm uppercase">
             Total Courses
           </div>
         </div>
 
         <div className="course-card p-4 sm:p-6 text-center">
-          <div className="text-2xl sm:text-3xl font-bold text-white">
+          <div className="text-2xl sm:text-3xl font-bold text-black">
             {filteredCourses.length}
           </div>
-          <div className="text-white/80 text-xs sm:text-sm uppercase">
+          <div className="text-black/80 text-xs sm:text-sm uppercase">
             Filtered Results
           </div>
         </div>
 
         <div className="course-card p-4 sm:p-6 text-center">
-          <div className="text-2xl sm:text-3xl font-bold text-white capitalize">
+          <div className="text-2xl sm:text-3xl font-bold text-black capitalize">
             {userType}
           </div>
-          <div className="text-white/80 text-xs sm:text-sm uppercase">
+          <div className="text-black/80 text-xs sm:text-sm uppercase">
             Your Mode
           </div>
         </div>
