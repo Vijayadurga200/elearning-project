@@ -5,6 +5,8 @@ interface ProfileProps {
   updatePreferences: (prefs: any) => void;
 }
 
+const API_URL = "https://elearning-project-zhr9.onrender.com";
+
 const Profile: React.FC<ProfileProps> = ({ updatePreferences }) => {
 
   const [form, setForm] = useState({
@@ -30,15 +32,14 @@ const Profile: React.FC<ProfileProps> = ({ updatePreferences }) => {
 
   const handleSave = async () => {
 
-    // ❗ Validation FIRST
     if (!form.name || !form.email) {
       setMessage("⚠️ Please enter name and email");
       return;
     }
 
     try {
-      // ✅ FIXED BACKEND API
-      const res = await fetch("https://elearning-project-zhr9.onrender.com/api/users"), {
+      // ✅ FIXED: comma after URL, not closing parenthesis
+      const res = await fetch(`${API_URL}/api/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -57,15 +58,13 @@ const Profile: React.FC<ProfileProps> = ({ updatePreferences }) => {
 
       if (res.ok) {
         setSaved(true);
-        setMessage("✅ User saved successfully!");
+        setMessage("✅ Profile saved successfully!");
 
-        // update preferences (your existing logic)
         updatePreferences({
           disability: form.disability,
           highContrast: form.contrast === 'high'
         });
 
-        // reset form
         setForm({
           name: '',
           email: '',
@@ -81,12 +80,12 @@ const Profile: React.FC<ProfileProps> = ({ updatePreferences }) => {
         }, 3000);
 
       } else {
-        setMessage("❌ " + (data.error || "Failed to save user"));
+        setMessage("❌ " + (data.error || "Failed to save profile"));
       }
 
     } catch (err) {
       console.error(err);
-      setMessage("❌ Server error");
+      setMessage("❌ Could not reach server. Please try again.");
     }
   };
 
@@ -159,7 +158,6 @@ const Profile: React.FC<ProfileProps> = ({ updatePreferences }) => {
         {/* Features */}
         <div>
           <label className="text-white font-medium">Preferred Features:</label>
-
           <div className="grid grid-cols-2 gap-4 mt-3">
             {[
               "Voice Navigation",
@@ -178,7 +176,7 @@ const Profile: React.FC<ProfileProps> = ({ updatePreferences }) => {
           </div>
         </div>
 
-        {/* 🔤 Font Size (NEW ADDITION) */}
+        {/* Font Size */}
         <div>
           <label className="text-white font-medium">🔤 Font Size:</label>
           <select
@@ -192,7 +190,7 @@ const Profile: React.FC<ProfileProps> = ({ updatePreferences }) => {
           </select>
         </div>
 
-        {/* 🎨 Contrast Level (NEW ADDITION) */}
+        {/* Contrast Level */}
         <div>
           <label className="text-white font-medium">🎨 Contrast Level:</label>
           <select
