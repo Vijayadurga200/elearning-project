@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Lesson {
   id: string;
@@ -24,6 +25,8 @@ interface Props {
 }
 
 const CourseCard: React.FC<Props> = ({ course }) => {
+  const navigate = useNavigate();
+
   const lessonCount = course.lessons?.length || 0;
 
   const description =
@@ -68,8 +71,11 @@ const CourseCard: React.FC<Props> = ({ course }) => {
         <span>⏱ {duration}</span>
       </div>
 
-      {/* Button */}
-      <button className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition">
+      {/* ✅ FIXED: navigates to course detail page */}
+      <button
+        onClick={() => navigate(`/courses/${course.id}`)}
+        className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition"
+      >
         View Course
       </button>
 
