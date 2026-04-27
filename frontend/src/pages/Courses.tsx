@@ -23,10 +23,9 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
   const [filterLevel, setFilterLevel] = useState('all');
   const [loading, setLoading] = useState(true);
 
-  // ✅ FIXED FETCH (retry + proper loading control)
-  const fetchCourses = async () => {
+  const fetchCourses = async (attempt = 1) => {
     try {
-      console.log("📡 Calling API...");
+      console.log(`📡 Fetching courses (attempt ${attempt})...`);
 
       const res = await fetch(`${API_URL}/api/courses`, {
         method: "GET",
@@ -35,23 +34,25 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
 
       console.log("📊 Status:", res.status);
 
-      if (!res.ok) throw new Error("Server not ready");
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
 
       const data = await res.json();
-      console.log("📦 DATA:", data);
+      console.log("📦 Data received:", data);
 
-      if (Array.isArray(data) && data.length > 0) {
-        setCourses(data);
-        setLoading(false); // ✅ ONLY when success
-      } else {
-        throw new Error("Empty data");
-      }
+      setCourses(Array.isArray(data) ? data : []);
+      setLoading(false);
 
     } catch (error) {
-      console.error("⚠️ Retry fetching...", error);
+      console.error(`Attempt ${attempt} failed:`, error);
 
-      // 🔥 retry after 3 sec (Render cold start fix)
-      setTimeout(fetchCourses, 3000);
+      if (attempt < 4) {
+        // Retry up to 3 times to handle Render cold start delay
+        setTimeout(() => fetchCourses(attempt + 1), 3000);
+      } else {
+        // Give up after 3 retries — show empty state
+        setCourses([]);
+        setLoading(false);
+      }
     }
   };
 
@@ -59,7 +60,6 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
     fetchCourses();
   }, []);
 
-  // ✅ FILTER LOGIC
   const filteredCourses = courses.filter((course) => {
     const matchesSearch = course.title
       ?.toLowerCase()
@@ -77,7 +77,6 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
     setFilterLevel('all');
   };
 
-  // ✅ LOADING STATE (keeps retrying)
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -85,6 +84,9 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
           <p className="text-white text-lg">
             Loading courses... (server waking up ⏳)
+          </p>
+          <p className="text-white/60 text-sm mt-2">
+            This may take up to 10 seconds on first load
           </p>
         </div>
       </div>
@@ -113,14 +115,14 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
             <input
               type="text"
               placeholder="Search courses..."
-              className="pl-12 pr-4 py-3 w-full bg-white/20 border border-white/30 rounded-xl text-white"
+              className="pl-12 pr-4 py-3 w-full bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
           <select
-            className="bg-white/20 border border-white/30 text-white px-4 py-3 rounded-xl w-full sm:w-auto"
+            className="bg-white/20 border border-white/30 text-white px-4 py-3 rounded-xl w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-white/50"
             value={filterLevel}
             onChange={(e) => setFilterLevel(e.target.value)}
           >
@@ -140,7 +142,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           <div className="text-3xl font-bold text-white">
             {courses.length}
           </div>
-          <div className="text-white/80 text-sm">
+          <div className="text-white/80 text-sm uppercase tracking-wide">
             Total Courses
           </div>
         </div>
@@ -149,16 +151,16 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           <div className="text-3xl font-bold text-white">
             {filteredCourses.length}
           </div>
-          <div className="text-white/80 text-sm">
+          <div className="text-white/80 text-sm uppercase tracking-wide">
             Filtered Results
           </div>
         </div>
 
         <div className="course-card p-6 text-center">
-          <div className="text-3xl font-bold text-white">
+          <div className="text-3xl font-bold text-white capitalize">
             {userType}
           </div>
-          <div className="text-white/80 text-sm">
+          <div className="text-white/80 text-sm uppercase tracking-wide">
             Your Mode
           </div>
         </div>
@@ -184,12 +186,11 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
               No courses found
             </h3>
             <p className="text-white/80 mb-8">
-              Try adjusting search or filters
+              Try adjusting your search or filter settings
             </p>
-
             <button
               onClick={clearFilters}
-              className="btn-primary px-8 py-3"
+              className="btn-primary px-8 py-3 text-lg"
             >
               Clear Filters
             </button>
