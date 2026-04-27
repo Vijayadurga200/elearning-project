@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = "https://elearning-project-zhr9.onrender.com";
+const ADMIN_PASSWORD = "admin123";
+
 const Admin = () => {
   const navigate = useNavigate();
 
@@ -10,8 +13,7 @@ const Admin = () => {
 
   const [stats, setStats] = useState({ users: 0, courses: 5 });
   const [users, setUsers] = useState<any[]>([]);
-
-  const ADMIN_PASSWORD = "admin123";
+  const [loadingData, setLoadingData] = useState(false);
 
   const handleLogin = () => {
     if (password === ADMIN_PASSWORD) {
@@ -22,28 +24,25 @@ const Admin = () => {
     }
   };
 
-  // 🔄 LIVE DATA
+  const fetchData = async () => {
+    setLoadingData(true);
+    try {
+      const res = await fetch(`${API_URL}/api/users`);
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
+      setUsers(Array.isArray(data) ? data : []);
+      setStats({ users: Array.isArray(data) ? data.length : 0, courses: 5 });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  // ✅ Fetch once on login — no aggressive 2-second polling
   useEffect(() => {
     if (!isAuthenticated) return;
-
-    const fetchData = () => {
-      fetch("https://elearning-project-zhr9.onrender.com/api/users")
-        .then(res => res.json())
-        .then(data => {
-          setUsers(data);
-
-          setStats({
-            users: data.length,
-            courses: 5
-          });
-        })
-        .catch(err => console.error(err));
-    };
-
     fetchData();
-    const interval = setInterval(fetchData, 2000);
-
-    return () => clearInterval(interval);
   }, [isAuthenticated]);
 
   // 🔒 LOGIN PAGE
@@ -59,14 +58,15 @@ const Admin = () => {
             placeholder="Enter admin password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 mb-4 rounded-lg bg-white/20 text-white"
+            onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+            className="w-full px-4 py-3 mb-4 rounded-lg bg-white/20 text-white placeholder-white/50"
           />
 
           {error && <p className="text-red-400 mb-4">{error}</p>}
 
           <button
             onClick={handleLogin}
-            className="bg-blue-500 px-6 py-3 rounded-lg w-full"
+            className="bg-blue-500 px-6 py-3 rounded-lg w-full hover:bg-blue-600 transition"
           >
             Login
           </button>
@@ -117,37 +117,49 @@ const Admin = () => {
 
       {/* USERS TABLE */}
       <div className="bg-white/20 p-6 rounded-xl">
-        <h3 className="text-xl font-bold mb-4">👥 Users List</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold">👥 Users List</h3>
+          <button
+            onClick={fetchData}
+            disabled={loadingData}
+            className="text-sm px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition disabled:opacity-50"
+          >
+            {loadingData ? 'Refreshing...' : '🔄 Refresh'}
+          </button>
+        </div>
 
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b border-white/30">
-              <th className="p-2">Name</th>
-              <th className="p-2">Email</th>
-              <th className="p-2">Disability</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {users.map((user, index) => (
-              <tr key={index} className="border-b border-white/10">
-                <td className="p-2">{user.name}</td>
-                <td className="p-2">{user.email}</td>
-                <td className="p-2">{user.disability}</td>
+        {users.length === 0 ? (
+          <p className="text-white/60 text-center py-6">
+            {loadingData ? 'Loading users...' : 'No users registered yet'}
+          </p>
+        ) : (
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-white/30">
+                <th className="p-2">Name</th>
+                <th className="p-2">Email</th>
+                <th className="p-2">Disability</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((user, index) => (
+                <tr key={index} className="border-b border-white/10">
+                  <td className="p-2">{user.name}</td>
+                  <td className="p-2">{user.email}</td>
+                  <td className="p-2">{user.disability}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
-      {/* ================= STATIC ANALYTICS SECTION (NEW) ================= */}
-
+      {/* ANALYTICS SECTION */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* Users by Disability */}
         <div className="bg-white/20 p-6 rounded-xl">
           <h3 className="text-xl font-bold mb-4">👥 Users by Disability Type</h3>
-
           <div className="space-y-4">
 
             <div>
@@ -177,7 +189,6 @@ const Admin = () => {
         {/* Most Used Features */}
         <div className="bg-white/20 p-6 rounded-xl">
           <h3 className="text-xl font-bold mb-4">🔧 Most Used Features</h3>
-
           <div className="space-y-4">
 
             <div>
@@ -217,14 +228,14 @@ const Admin = () => {
       <div className="text-center space-x-4">
         <button
           onClick={() => navigate('/')}
-          className="bg-red-500 px-6 py-3 rounded-lg"
+          className="bg-red-500 px-6 py-3 rounded-lg hover:bg-red-600 transition"
         >
           ← Back to Home
         </button>
 
         <button
           onClick={() => setIsAuthenticated(false)}
-          className="bg-gray-500 px-6 py-3 rounded-lg"
+          className="bg-gray-500 px-6 py-3 rounded-lg hover:bg-gray-600 transition"
         >
           🔒 Logout
         </button>
