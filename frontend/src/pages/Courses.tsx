@@ -82,7 +82,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="course-card p-12 text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
-          <p className="text-white text-lg">
+          <p className="text-blue text-lg">
             Loading courses... (server waking up ⏳)
           </p>
           <p className="text-white/60 text-sm mt-2">
@@ -102,7 +102,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           <h1 className="text-4xl font-bold text-white mb-2">
             All Courses
           </h1>
-          <p className="text-white/80 text-lg">
+          <p className="text-blue/80 text-lg">
             Find the perfect course for your learning journey
           </p>
         </div>
@@ -122,7 +122,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           </div>
 
           <select
-            className="bg-white/20 border border-white/30 text-white px-4 py-3 rounded-xl w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-white/50"
+            className="bg-blue/20 border border-white/30 text-white px-4 py-3 rounded-xl w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-white/50"
             value={filterLevel}
             onChange={(e) => setFilterLevel(e.target.value)}
           >
@@ -142,13 +142,13 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
           <div className="text-3xl font-bold text-white">
             {courses.length}
           </div>
-          <div className="text-white/80 text-sm uppercase tracking-wide">
+          <div className="text-black/80 text-sm uppercase tracking-wide">
             Total Courses
           </div>
         </div>
 
         <div className="course-card p-6 text-center">
-          <div className="text-3xl font-bold text-white">
+          <div className="text-3xl font-bold text-black">
             {filteredCourses.length}
           </div>
           <div className="text-white/80 text-sm uppercase tracking-wide">
@@ -157,7 +157,7 @@ const Courses: React.FC<CoursesProps> = ({ userType }) => {
         </div>
 
         <div className="course-card p-6 text-center">
-          <div className="text-3xl font-bold text-white capitalize">
+          <div className="text-3xl font-bold text-black capitalize">
             {userType}
           </div>
           <div className="text-white/80 text-sm uppercase tracking-wide">
