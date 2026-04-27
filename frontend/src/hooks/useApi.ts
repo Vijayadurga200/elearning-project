@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react';
 
+const API_URL = "https://elearning-project-zhr9.onrender.com";
+
 export const useApi = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -12,7 +14,7 @@ export const useApi = () => {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:5000${url}`, {
+      const response = await fetch(`${API_URL}${url}`, {
         ...options,
         headers: {
           'Content-Type': 'application/json',
@@ -26,6 +28,7 @@ export const useApi = () => {
 
       const data = await response.json();
       return data as T;
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
       return null;
